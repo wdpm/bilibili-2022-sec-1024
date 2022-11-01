@@ -1,0 +1,17 @@
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "invalid_index_name_exception",
+        "reason": "Invalid index name [_river], must not start with '_'.",
+        "index_uuid": "_na_",
+        "index": "_river"
+      }
+    ],
+    "type": "invalid_index_name_exception",
+    "reason": "Invalid index name [_river], must not start with '_'.",
+    "index_uuid": "_na_",
+    "index": "_river"
+  },
+  "status": 400
+}

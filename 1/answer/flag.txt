@@ -1,0 +1,2 @@
+x-bilictf-flag1: flag1{0358b7e0-9f2e-455e-af25-fba0ae3fcb75}
+x-bilictf-hidden: maybe something in back2.png:)

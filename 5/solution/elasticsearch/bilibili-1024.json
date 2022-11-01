@@ -1,0 +1,31 @@
+{
+  "took": 1,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": {
+      "value": 1,
+      "relation": "eq"
+    },
+    "max_score": 1.0,
+    "hits": [
+      {
+        "_index": "bilibili-1024",
+        "_type": "_doc",
+        "_id": "2eSE84MBoy7sRgaelu2S",
+        "_score": 1.0,
+        "_source": {
+          "username": "ctfer",
+          "passwd": "1qaz@WSX",
+          "ttl": "false",
+          "msg": "good luck ctfer"
+        }
+      }
+    ]
+  }
+}
