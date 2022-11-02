@@ -16,7 +16,9 @@
   solution/--------------> 解决方案
 ```
 
+## portable version
 
+Check the pdf file in this repo.
 
 ## 致谢
 

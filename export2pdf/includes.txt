@@ -1,0 +1,7 @@
+../1/docs/writeup.md
+../2/docs/writeup.md
+../3/docs/writeup.md
+../4/docs/writeup.md
+../5/docs/writeup.md
+../6/docs/writeup.md
+../7-event-egg/docs/README.md

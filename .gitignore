@@ -3,3 +3,7 @@
 .fleet
 
 *.pyc
+
+# output
+export2pdf/merge.md
+export2pdf/assets/
