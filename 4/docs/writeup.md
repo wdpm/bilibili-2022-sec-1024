@@ -190,7 +190,7 @@ amount 是 _balances[msg.sender]，也就是 _balances。**于是我们关键是
 
 另外，通过这个函数可以得知：1 amount = 6 _balances。
 
-现在，我们有了初步的想法：withdraw() x2 => [_ebalances1812] x2 => [sale1812/6] x2 => sale302 x2
+现在，我们有了初步的想法：withdraw() x2 => [_ebalances1812] x2 => [sale1812/6] x2 => sale302 x2。
 
 **也就是必须使用至少302个happybili币来调用sale()两次。**一共需要604个happybili币。
 
@@ -461,9 +461,7 @@ print(base64_message)
 - 确认stf.sol这个合约被正确编译，现在是可部署状态。
 - 填入他人合约地址。
 
-点击 At Address 然后加载B站CTF的合约。
-
-如果一切正常，那么就能看到合约现在可以交互了。目前，你的余额balance是0。这就是起点。
+点击 At Address 然后加载B站CTF的合约。 如果一切正常，那么就能看到合约现在可以交互了。
 
 ---
 

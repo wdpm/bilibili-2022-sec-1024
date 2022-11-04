@@ -161,9 +161,7 @@ __call()。那么这里，确定了reader属性为 $content，要执行 \$conten
 
   `getFormatter(close)($args)` => `$action.run()`，显然这就是我们想要的。
 
-- 在 `$content->providers ` 中提供close属性的话会怎么样？由于provider从调用形式来看要求provider元素是类实例，例如$show
-
-  ，因此不适合。
+- 在 `$content->providers ` 中提供close属性的话会怎么样？由于provider从调用形式来看要求provider元素是类实例，例如$show ，因此不适合。
 
 现在我们走完了所有的链式调用，并给出了理论上可行的解决方式：
 

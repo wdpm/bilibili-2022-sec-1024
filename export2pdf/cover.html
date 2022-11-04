@@ -1,0 +1,19 @@
+<meta name="title" content="${title}">
+<div id='_export_cover' style="height:100vh;">
+<!--    可以考虑使用一个wrapper将下面子元素全部包含，然后就能设置author元素的右对齐-->
+    <div id='_export_title' style="margin-top: 25%;text-align: center;font-size: 3rem;">
+    </div>
+    <div id='_export_author' style="margin-top: 65%;text-align: center;font-size: 1rem;"></div>
+</div>
+<script>
+    var $cover = document.querySelector("#_export_cover");
+    var title = document.querySelector("meta[name='title']").getAttribute("content");
+    if (!title || title === "${title}") {
+        // no title
+        $cover.remove();
+    } else {
+        document.body.insertBefore($cover, document.body.childNodes[0])
+        $cover.querySelector("#_export_title").textContent = title;
+        $cover.querySelector("#_export_author").textContent = "author: wdpm";
+    }
+</script>
