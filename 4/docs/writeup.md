@@ -301,7 +301,10 @@ function testborrowtwice(SignCoupon calldata scoupon) public {
 }
 ````
 
-> 这里有个问题：scoupon.coupon.loankey == 2233 ，到了flashloan() 函数里面，却要求 scoupon.coupon.loankey == 0。为何能正常通过呢？这份代码和实际部署的代码真的一致吗？还是说这个BUG被修复了。
+> 这里有个问题：scoupon.coupon.loankey == 2233 ，到了flashloan() 函数里面，却要求 scoupon.coupon.loankey == 0。为何能正常通过呢？
+
+对于这道题，`bytes reason` 是一个bug字段，会造成第一个字段也就是loankey变成0。 因此可以连续通过 testborrowtwice 和 flashloan 看似矛盾的验证。 
+BUG全称为：Head Overflow Bug in Calldata Tuple ABI-Reencoding，0.5.8引入，0.8.16被修复。[参阅链接](https://blog.soliditylang.org/2022/08/08/calldata-tuple-reencoding-head-overflow-bug/) 。
 
 下面给出示例solution.sol代码
 
